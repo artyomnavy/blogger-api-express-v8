@@ -4,14 +4,14 @@ import {OutputDevicesSessionsType, DevicesSessionsType} from "../types/device/ou
 import {deviceSessionMapper} from "../types/device/mapper";
 
 export const devicesQueryRepository = {
-    async checkDeviceSession(userId: string, deviceId: string): Promise<boolean> {
-        const checkDeviceSession: WithId<DevicesSessionsType> | null = await devicesCollection
+    async checkDeviceSession(userId: string, deviceId: string): Promise<WithId<DevicesSessionsType> | null> {
+        const deviceSession: WithId<DevicesSessionsType> | null = await devicesCollection
             .findOne({userId: userId, deviceId: deviceId})
 
-        if (checkDeviceSession) {
-            return true
+        if (deviceSession) {
+            return deviceSession
         } else {
-            return false
+            return null
         }
     },
     async getAllDevicesSessionsForUser(userId: string): Promise<OutputDevicesSessionsType[]> {
