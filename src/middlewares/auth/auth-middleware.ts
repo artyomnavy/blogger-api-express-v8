@@ -103,15 +103,17 @@ export const authRefreshTokenMiddleware = async (req: Request, res: Response, ne
         return
     }
 
-    const isDeviceSession = await devicesQueryRepository
+    const deviceSession = await devicesQueryRepository
         .checkDeviceSession(payloadToken.userId, payloadToken.deviceId)
 
-    if (!isDeviceSession) {
+    if (!deviceSession) {
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
 
-    if (new Date(payloadToken.iat * 1000) !== isDeviceSession.iat) {
+    const iatRefreshToken = new Date(payloadToken.iat * 1000)
+
+    if (iatRefreshToken < deviceSession.iat) {
         res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
         return
     }
