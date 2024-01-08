@@ -235,6 +235,9 @@ describe('/security', () => {
         const updateTokens = await request(app)
             .post('/auth/refresh-token')
             .set('Cookie', [`refreshToken=${refreshToken1}`])
+            .set('User-Agent', userAgent.title1)
+            .set('X-Forwarded-For', ips.ip1)
+            .set('Remote-Addr', ips.ip1)
             .expect(HTTP_STATUSES.OK_200)
 
         refreshToken1 = updateTokens.headers['set-cookie'][0].split('=')[1].split(';')[0]

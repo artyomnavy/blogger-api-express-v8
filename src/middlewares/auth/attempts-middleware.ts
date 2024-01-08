@@ -9,7 +9,7 @@ export const attemptsMiddleware = async (req: Request, res: Response, next: Next
     const limitDate = sub(new Date(), {
         seconds: 10
     })
-    const ip = req.ip!
+    const ip = req.ip! || 'unknown'
     const url = req.originalUrl
 
     const amount = await authQueryRepository

@@ -17,9 +17,9 @@ export const devicesService = {
 
         return createdDeviceSession
     },
-    async updateDeviceSession(deviceId: string, userId: string, iat: Date, exp: Date): Promise<boolean> {
+    async updateDeviceSession(updateData: DevicesSessionsType): Promise<boolean> {
         return await devicesRepository
-            .updateDeviceSession(deviceId, userId, iat, exp)
+            .updateDeviceSession(updateData)
     },
     async terminateDeviceSessionByLogout(deviceId: string, userId: string): Promise<boolean>{
         return await devicesRepository

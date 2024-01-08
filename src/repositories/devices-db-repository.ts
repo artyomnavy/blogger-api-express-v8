@@ -7,14 +7,20 @@ export const devicesRepository = {
             .insertOne(newDeviceSession)
         return newDeviceSession
     },
-    async updateDeviceSession(deviceId: string, userId: string, iat: Date, exp: Date): Promise<boolean> {
+    async updateDeviceSession(updateData: DevicesSessionsType): Promise<boolean> {
         const resultUpdateDeviceSession = await devicesCollection
-            .updateOne({deviceId: deviceId, userId: userId}, {
-                $set: {
-                    iat: iat,
-                    exp: exp
-                }
-            })
+            .updateOne({
+                deviceId: updateData.deviceId,
+                userId: updateData.userId},
+                {
+                    $set: {
+                    iat: updateData.iat,
+                    exp: updateData.exp,
+                    ip: updateData.ip,
+                    deviceName: updateData.deviceName
+                    }
+                })
+
         return resultUpdateDeviceSession.matchedCount === 1
     },
     async terminateDeviceSessionByLogout(deviceId: string, userId: string): Promise<boolean> {

@@ -31,7 +31,7 @@ authRouter.post('/login',
         } = req.body
 
         const deviceId = uuidv4()
-        const ip = req.ip!
+        const ip = req.ip! || 'unknown'
         const deviceName = req.headers['user-agent'] || 'unknown'
 
         const user = await usersService
@@ -70,6 +70,9 @@ authRouter.post('/refresh-token',
         const userId = req.userId!
         const deviceId = req.deviceId!
 
+        const newIp = req.ip! || 'unknown'
+        const newDeviceName = req.headers['user-agent'] || 'unknown'
+
         const newAccessToken = await jwtService
             .createAccessJWT(userId)
 
@@ -83,7 +86,14 @@ authRouter.post('/refresh-token',
         const newExp = new Date(newPayloadRefreshToken.exp * 1000)
 
         const isUpdateDeviceSession = await devicesService
-            .updateDeviceSession(deviceId, userId, newIat, newExp)
+            .updateDeviceSession({
+                iat: newIat,
+                exp: newExp,
+                ip: newIp,
+                deviceId: deviceId,
+                deviceName: newDeviceName,
+                userId: userId
+            })
 
         if (isUpdateDeviceSession) {
             res
